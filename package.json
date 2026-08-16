@@ -1,0 +1,31 @@
+{
+  "name": "noter-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node --watch app.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "studio": "npx prisma studio --config ./prisma.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shannqa/noter-server.git"
+  },
+  "keywords": [],
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Shannqa/noter-server/issues"
+  },
+  "homepage": "https://github.com/Shannqa/noter-server#readme",
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.9.1",
+    "@prisma/client": "^7.9.1",
+    "express": "^5.2.1",
+    "pg": "^8.23.0"
+  },
+  "devDependencies": {
+    "dotenv": "^17.4.2",
+    "prisma": "^7.9.1"
+  }
+}
