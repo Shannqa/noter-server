@@ -1,4 +1,10 @@
-import { categoryRouter, addCategory, getCategory, updateCategory, deleteCategory } from "../controllers/noteController.js";
+import {
+  getAllCategories,
+  addCategory,
+  getCategory,
+  updateCategory,
+  deleteCategory,
+} from "../controllers/categoryController.js";
 import { Router } from "express";
 
 const categoryRouter = Router();
