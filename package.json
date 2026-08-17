@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node --watch app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "studio": "npx prisma studio --config ./prisma.config.js"
+    "studio": "npx prisma studio --config ./prisma.config.js",
+    "updClient": "npx prisma generate",
+    "updSchema": "npx prisma migrate dev"
   },
   "repository": {
     "type": "git",

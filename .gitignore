@@ -142,4 +142,5 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
 
+# The generated Prisma Client + query engine
 /prisma/..generated/prisma
