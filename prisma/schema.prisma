@@ -30,7 +30,14 @@ model Note {
   userId     Int
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
+  status     Status     @default(ACTIVE)
   categories Category[]
+}
+
+enum Status {
+  ACTIVE
+  ARCHIVE
+  BIN
 }
 
 model Category {

@@ -2,11 +2,15 @@ import { prisma } from "../prisma/lib/prisma.js";
 
 async function getAllCategories(req, res) {
   try {
-    console.log(req.query);
-    const userId = req.query.userId;
+    const { userId } = req.query;
     const result = await prisma.category.findMany({
       where: {
         userId: Number(userId),
+      },
+      select: {
+        id: true,
+        name: true,
+        userId: true,
       },
     });
     res.status(200).json(result);
@@ -33,11 +37,16 @@ async function addCategory(req, res) {
 }
 
 async function getCategory(req, res) {
-  const { categoryId } = req.body;
   try {
+    const { categoryId } = req.query;
     const result = await prisma.category.findUnique({
       where: {
         id: categoryId,
+      },
+      select: {
+        id: true,
+        name: true,
+        userId: true,
       },
     });
     res.status(200).json(result);
@@ -46,8 +55,39 @@ async function getCategory(req, res) {
     res.status(404).json({ error: "Category not found" });
   }
 }
-async function updateCategory(req, res) {}
-async function deleteCategory(req, res) {}
+
+async function updateCategory(req, res) {
+  try {
+    const { categoryId, name } = req.body;
+    const result = await prisma.category.update({
+      where: {
+        id: categoryId,
+      },
+      data: {
+        name,
+      },
+    });
+    res.status(200).json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ error: "Category update failed" });
+  }
+}
+
+async function deleteCategory(req, res) {
+  try {
+    const { categoryId } = req.body;
+    const result = await prisma.category.delete({
+      where: {
+        id: categoryId,
+      },
+    });
+    res.status(204);
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ error: "Category deletion failed" });
+  }
+}
 
 export {
   getAllCategories,
