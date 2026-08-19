@@ -14,7 +14,7 @@ async function getAllNotes(req, res) {
         createdAt: true,
         updatedAt: true,
         userId: true,
-        categories: true,
+        category: true,
         status: true,
       },
     });
@@ -27,13 +27,16 @@ async function getAllNotes(req, res) {
 
 async function addNote(req, res) {
   try {
-    const { title, body, userId, categories } = req.body;
+    const { title, body, userId, categoryId } = req.body;
+    console.log(req.body);
+    const categoryToAdd = Number(categoryId);
+
     const result = await prisma.note.create({
       data: {
         title,
         body,
         userId: Number(userId),
-        categories,
+        categoryId: Number(categoryId),
       },
     });
     res.status(201).json(result);
@@ -57,7 +60,7 @@ async function getNote(req, res) {
         createdAt: true,
         updatedAt: true,
         userId: true,
-        categories: true,
+        categoryId: true,
       },
     });
     res.status(200).json(result);
