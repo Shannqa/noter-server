@@ -3,10 +3,16 @@ import { prisma } from "../prisma/lib/prisma.js";
 async function getAllNotes(req, res) {
   try {
     const { userId } = req.query;
+    console.log(req.user);
     const result = await prisma.note.findMany({
       where: {
         userId: Number(userId),
       },
+      orderBy: [
+        {
+          updatedAt: "desc",
+        },
+      ],
       select: {
         id: true,
         title: true,
@@ -29,14 +35,17 @@ async function addNote(req, res) {
   try {
     const { title, body, userId, categoryId } = req.body;
     console.log(req.body);
-    const categoryToAdd = Number(categoryId);
+    // const categoryToAdd = Number(categoryId);
 
     const result = await prisma.note.create({
       data: {
         title,
         body,
         userId: Number(userId),
-        categoryId: Number(categoryId),
+        categoryId: categoryId,
+      },
+      include: {
+        category: true,
       },
     });
     res.status(201).json(result);
@@ -72,16 +81,20 @@ async function getNote(req, res) {
 
 async function updateNote(req, res) {
   try {
-    const { title, body, userId, categories } = req.body;
+    const { id, title, body, userId, categoryId } = req.body;
     const result = await prisma.note.update({
       where: {
-        id: categoryId,
+        id: id,
       },
       data: {
+        id,
         title,
         body,
         userId,
-        categories,
+        categoryId,
+      },
+      include: {
+        category: true,
       },
     });
     res.status(200).json(result);

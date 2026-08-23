@@ -58,10 +58,10 @@ async function getCategory(req, res) {
 
 async function updateCategory(req, res) {
   try {
-    const { categoryId, name } = req.body;
+    const { id, name } = req.body;
     const result = await prisma.category.update({
       where: {
-        id: categoryId,
+        id: id,
       },
       data: {
         name,
