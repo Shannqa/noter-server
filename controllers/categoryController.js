@@ -2,10 +2,12 @@ import { prisma } from "../prisma/lib/prisma.js";
 
 async function getAllCategories(req, res) {
   try {
-    const { userId } = req.query;
+    if (!req.user) {
+      return res.status(401).json({ message: "User not authenticated" });
+    }
     const result = await prisma.category.findMany({
       where: {
-        userId: Number(userId),
+        userId: Number(req.user.id),
       },
       select: {
         id: true,
@@ -22,11 +24,14 @@ async function getAllCategories(req, res) {
 
 async function addCategory(req, res) {
   try {
-    const { name, userId } = req.body;
+    if (!req.user) {
+      return res.status(401).json({ message: "User not authenticated" });
+    }
+    const { name } = req.body;
     const result = await prisma.category.create({
       data: {
         name,
-        userId: Number(userId),
+        userId: Number(req.user.id),
       },
     });
     res.status(201).json(result);
@@ -38,10 +43,12 @@ async function addCategory(req, res) {
 
 async function getCategory(req, res) {
   try {
-    const { categoryId } = req.query;
+    if (!req.user) {
+      return res.status(401).json({ message: "User not authenticated" });
+    }
     const result = await prisma.category.findUnique({
       where: {
-        id: categoryId,
+        id: req.user.id,
       },
       select: {
         id: true,
@@ -58,6 +65,9 @@ async function getCategory(req, res) {
 
 async function updateCategory(req, res) {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "User not authenticated" });
+    }
     const { id, name } = req.body;
     const result = await prisma.category.update({
       where: {
@@ -76,6 +86,9 @@ async function updateCategory(req, res) {
 
 async function deleteCategory(req, res) {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "User not authenticated" });
+    }
     const { categoryId } = req.body;
     const result = await prisma.category.delete({
       where: {

@@ -2,11 +2,12 @@ import { prisma } from "../prisma/lib/prisma.js";
 
 async function getAllNotes(req, res) {
   try {
-    const { userId } = req.query;
-    console.log(req.user);
+    if (!req.user) {
+      return res.status(401).json({ message: "User not authenticated" });
+    }
     const result = await prisma.note.findMany({
       where: {
-        userId: Number(userId),
+        userId: Number(req.user.id),
       },
       orderBy: [
         {
@@ -33,15 +34,18 @@ async function getAllNotes(req, res) {
 
 async function addNote(req, res) {
   try {
-    const { title, body, userId, categoryId } = req.body;
-    console.log(req.body);
+    if (!req.user) {
+      return res.status(401).json({ message: "User not authenticated" });
+    }
+    const { title, body, categoryId } = req.body;
+    // console.log(req.body);
     // const categoryToAdd = Number(categoryId);
 
     const result = await prisma.note.create({
       data: {
         title,
         body,
-        userId: Number(userId),
+        userId: Number(req.user.id),
         categoryId: categoryId,
       },
       include: {
@@ -57,6 +61,9 @@ async function addNote(req, res) {
 
 async function getNote(req, res) {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "User not authenticated" });
+    }
     const { noteId } = req.query;
     const result = await prisma.note.findUnique({
       where: {
@@ -81,7 +88,10 @@ async function getNote(req, res) {
 
 async function updateNote(req, res) {
   try {
-    const { id, title, body, userId, categoryId } = req.body;
+    if (!req.user) {
+      return res.status(401).json({ message: "User not authenticated" });
+    }
+    const { id, title, body, categoryId } = req.body;
     const result = await prisma.note.update({
       where: {
         id: id,
@@ -106,6 +116,9 @@ async function updateNote(req, res) {
 
 async function deleteNote(req, res) {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "User not authenticated" });
+    }
     const { noteId } = req.body;
     const result = await prisma.note.delete({
       where: {

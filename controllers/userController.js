@@ -11,7 +11,7 @@ async function signUp(req, res) {
         password,
       },
     });
-    console.log(result);
+    // console.log(result);
     res.status(201).json(result);
   } catch (err) {
     console.error(err);
@@ -20,7 +20,7 @@ async function signUp(req, res) {
 }
 
 async function logIn(req, res, next) {
-  console.log(req.body);
+  // console.log(req.body);
   passport.authenticate("local", (err, user, info) => {
     if (err) {
       return next(err);
@@ -44,7 +44,15 @@ async function logIn(req, res, next) {
   })(req, res, next);
 }
 
-async function logOut() {}
+async function logOut(req, res, next) {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    // console.log("logout11");
+    res.status(200).json({ message: "Logged out" });
+  });
+}
 
 async function auth(req, res) {
   // console.log("cookie:", req.headers.cookie);
