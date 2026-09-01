@@ -20,6 +20,7 @@ model User {
   createdAt  DateTime   @default(now())
   notes      Note[]
   categories Category[]
+  settings   Settings[]
 }
 
 model Note {
@@ -58,4 +59,16 @@ model Session {
 
   @@index([expire])
   @@map("session")
+}
+
+model Settings {
+  user   User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int   @id @unique
+  theme  Theme @default(DEFAULT)
+}
+
+enum Theme {
+  DEFAULT
+  LIGHT
+  DARK
 }

@@ -4,6 +4,7 @@ import { createServer } from "node:http";
 import cors from "cors";
 import session from "express-session";
 import passport from "passport";
+import bcrypt from "bcryptjs";
 import { Strategy as LocalStrategy } from "passport-local";
 import { prisma } from "./prisma/lib/prisma.js";
 import PG from "pg";
@@ -69,7 +70,10 @@ passport.use(
       if (!user) {
         return done(null, false, { message: "Incorrect username" });
       }
-      if (user.password != password) {
+
+      const match = await bcrypt.compare(password, user.password);
+
+      if (!match) {
         return done(null, false, { message: "Incorrect password" });
       }
       return done(null, user);
