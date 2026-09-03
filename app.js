@@ -10,6 +10,7 @@ import { prisma } from "./prisma/lib/prisma.js";
 import PG from "pg";
 import noteRouter from "./routes/noteRouter.js";
 import userRouter from "./routes/userRouter.js";
+import settingsRouter from "./routes/settingsRouter.js";
 import indexRouter from "./routes/indexRouter.js";
 import categoryRouter from "./routes/categoryRouter.js";
 import connectPgSimple from "connect-pg-simple";
@@ -53,6 +54,7 @@ app.use((req, res, next) => {
 app.use("/note", noteRouter);
 app.use("/user", userRouter);
 app.use("/category", categoryRouter);
+app.use("/settings", settingsRouter);
 app.use("/", indexRouter);
 app.use(express.urlencoded({ extended: false }));
 

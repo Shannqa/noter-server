@@ -9,16 +9,6 @@ async function getSettings(req, res) {
       where: {
         userId: Number(req.user.id),
       },
-      // select: {
-      //   id: true,
-      //   title: true,
-      //   body: true,
-      //   createdAt: true,
-      //   updatedAt: true,
-      //   userId: true,
-      //   category: true,
-      //   status: true,
-      // },
     });
     res.status(200).json(result);
   } catch (err) {
@@ -32,25 +22,23 @@ async function setSettings(req, res) {
     if (!req.user) {
       return res.status(401).json({ message: "User not authenticated" });
     }
-    const { title, body, categoryId } = req.body;
-    // console.log(req.body);
-    // const categoryToAdd = Number(categoryId);
 
-    const result = await prisma.settings.create({
-      data: {
-        title,
-        body,
+    const result = await prisma.settings.upsert({
+      where: {
         userId: Number(req.user.id),
-        categoryId: categoryId,
       },
-      include: {
-        category: true,
+      update: {
+        theme: req.body.theme,
+      },
+      create: {
+        userId: Number(req.user.id),
+        theme: req.body.theme,
       },
     });
-    res.status(201).json(result);
+    res.status(200).json(result);
   } catch (err) {
     console.error(err);
-    res.status(400).send({ error: "Failed to add note" });
+    res.status(400).send({ error: "Failed to save settings" });
   }
 }
 

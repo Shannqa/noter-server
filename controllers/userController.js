@@ -68,4 +68,35 @@ async function auth(req, res) {
   }
 }
 
-export { signUp, logIn, logOut, auth };
+async function changePassword(req, res, next) {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: "User not authenticated" });
+    }
+    const { currentPassword, newPassword } = req.body;
+    const match = await bcrypt.compare(currentPassword, req.user.password);
+
+    if (!match) {
+      console.log("passwords dont match");
+      return res.status(401).json({ message: "Passwords don't match" });
+    }
+
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+
+    const result = await prisma.user.update({
+      where: {
+        id: Number(req.user.id),
+      },
+      data: {
+        password: hashedNewPassword,
+      },
+    });
+
+    res.status(201).json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(400).send({ error: "Failed to change password" });
+  }
+}
+
+export { signUp, logIn, logOut, auth, changePassword };
