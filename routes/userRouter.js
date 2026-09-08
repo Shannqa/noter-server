@@ -1,10 +1,17 @@
-import { signUp, logIn, logOut, auth } from "../controllers/userController.js";
+import {
+  signUp,
+  logIn,
+  logOut,
+  auth,
+  validateSignup,
+  validateLogin,
+} from "../controllers/userController.js";
 import { Router } from "express";
 
 const userRouter = Router();
 
-userRouter.post("/signup", signUp);
-userRouter.post("/login", logIn);
+userRouter.post("/signup", validateSignup, signUp);
+userRouter.post("/login", validateLogin, logIn);
 userRouter.get("/logout", logOut);
 userRouter.get("/auth", auth);
 

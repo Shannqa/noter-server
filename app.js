@@ -68,15 +68,18 @@ passport.use(
           name: username,
         },
       });
-      console.log("user", user);
+      // console.log("user", user);
       if (!user) {
-        return done(null, false, { error: "Incorrect username" });
+        return done(null, false, { path: "name", msg: "User doesn't exist" });
       }
 
       const match = await bcrypt.compare(password, user.password);
 
       if (!match) {
-        return done(null, false, { error: "Incorrect password" });
+        return done(null, false, {
+          path: "password",
+          msg: "Incorrect password",
+        });
       }
       return done(null, user);
     } catch (err) {
